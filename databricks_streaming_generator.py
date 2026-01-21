@@ -305,11 +305,10 @@ class TransactionGenerator:
         if has_error and random.random() < 0.2:
             return random.choice(['UNKNOWN', '', 'error', 'N/A'])
         
-        return self.faker.random_element({
-            'approved': 0.85,
-            'declined': 0.10,
-            'pending': 0.05
-        })
+        # 85% approved, 10% declined, 5% pending
+        statuses = ['approved', 'declined', 'pending']
+        weights = [0.85, 0.10, 0.05]
+        return random.choices(statuses, weights=weights, k=1)[0]
     
     def _generate_currency(self, has_error: bool) -> str:
         """Generate currency code with possible inconsistencies."""
@@ -323,8 +322,10 @@ class TransactionGenerator:
         if has_error and random.random() < 0.15:
             return random.choice(['XX', '', 'N/A', 'UNKNOWN', '00'])
         
-        countries = {'US': 0.80, 'GB': 0.10, 'CA': 0.05, 'BR': 0.05}
-        return self.faker.random_element(countries)
+        # Majority of transactions in the US
+        countries = ['US', 'GB', 'CA', 'BR']
+        weights = [0.80, 0.10, 0.05, 0.05]
+        return random.choices(countries, weights=weights, k=1)[0]
     
     def _generate_payment_method(self, has_error: bool) -> str:
         """Generate payment method with possible inconsistencies."""
